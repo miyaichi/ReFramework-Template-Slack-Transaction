@@ -66,7 +66,6 @@
       <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
       <AssemblyReference>UiPath.Excel</AssemblyReference>
       <AssemblyReference>System.ValueTuple</AssemblyReference>
-      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:Annotation.AnnotationText="Description: In this file all other process specific files will be invoked. If an application exception occurs, the current transaction can be retried. If a BRE is thrown, the transaction will be skipped. Can be a flowchart or sequence. " DisplayName="ProcessTransaction" sap2010:WorkflowViewState.IdRef="Sequence_1">
@@ -83,88 +82,75 @@
           <OutArgument x:TypeArguments="scg:Dictionary(x:String, x:String)" x:Key="Info">[Info]</OutArgument>
         </ui:InvokeWorkflowFile.Arguments>
       </ui:InvokeWorkflowFile>
-      <Sequence DisplayName="Debug">
-        <WriteLine DisplayName="Write Line" Text="-- Info --" sap2010:WorkflowViewState.IdRef="WriteLine_1" />
-        <ui:ForEach x:TypeArguments="scg:KeyValuePair(x:String, x:String)" CurrentIndex="{x:Null}" DisplayName="For Each" Values="[Info]">
-          <ui:ForEach.Body>
-            <ActivityAction x:TypeArguments="scg:KeyValuePair(x:String, x:String)">
-              <ActivityAction.Argument>
-                <DelegateInArgument x:TypeArguments="scg:KeyValuePair(x:String, x:String)" Name="item" />
-              </ActivityAction.Argument>
-              <Sequence DisplayName="Body">
-                <WriteLine DisplayName="Write Line" Text="[item.Key + &quot; : &quot; + item.Value]" sap2010:WorkflowViewState.IdRef="WriteLine_2" />
-                <sap2010:WorkflowViewState.IdRef>Sequence_4</sap2010:WorkflowViewState.IdRef>
-              </Sequence>
-            </ActivityAction>
-          </ui:ForEach.Body>
-          <sap2010:WorkflowViewState.IdRef>ForEach`1_1</sap2010:WorkflowViewState.IdRef>
-        </ui:ForEach>
-        <WriteLine DisplayName="Write Line" Text="-- Profile --" sap2010:WorkflowViewState.IdRef="WriteLine_3" />
-        <ui:ForEach x:TypeArguments="scg:KeyValuePair(x:String, x:String)" CurrentIndex="{x:Null}" DisplayName="For Each" Values="[Profile]">
-          <ui:ForEach.Body>
-            <ActivityAction x:TypeArguments="scg:KeyValuePair(x:String, x:String)">
-              <ActivityAction.Argument>
-                <DelegateInArgument x:TypeArguments="scg:KeyValuePair(x:String, x:String)" Name="item" />
-              </ActivityAction.Argument>
-              <Sequence DisplayName="Body">
-                <WriteLine DisplayName="Write Line" Text="[item.Key + &quot; : &quot; + item.Value]" sap2010:WorkflowViewState.IdRef="WriteLine_4" />
-                <sap2010:WorkflowViewState.IdRef>Sequence_5</sap2010:WorkflowViewState.IdRef>
-              </Sequence>
-            </ActivityAction>
-          </ui:ForEach.Body>
-          <sap2010:WorkflowViewState.IdRef>ForEach`1_2</sap2010:WorkflowViewState.IdRef>
-        </ui:ForEach>
-        <sap2010:WorkflowViewState.IdRef>Sequence_6</sap2010:WorkflowViewState.IdRef>
-      </Sequence>
     </Sequence>
-    <Sequence DisplayName="Post Message" sap2010:WorkflowViewState.IdRef="Sequence_3" />
-    <sads:DebugSymbol.Symbol>d2BDOlxVc2Vyc1xtaXlhaWNoaS55b3NoaWhpa29cRG9jdW1lbnRzXFVpUGF0aFxSZUZyYW1ld29yay1UZW1wbGF0ZS1TbGFjay1UcmFuc2FjdGlvblxQcm9jZXNzLnhhbWwYSAN6DgIBAU0FdxACAQN4BXhZAgECTgdVHwIBGVYHdhICAQRRP1FmAgEhUEBQYwIBH1NaU2ACAR1SXVJmAgEbTrkBTtABAgEaVwlXbwIBF1gJZRYCAQ9mCWZyAgENZwl0FgIBBVcyVz4CARhYggFYigECARVeD2EaAgEQZjJmQQIBDmeCAWeNAQIBC20PcBoCAQZfEV+WAQIBEW4RbpYBAgEHXzpfZQIBEm46bmUCAQg=</sads:DebugSymbol.Symbol>
+    <Sequence DisplayName="Post Message" sap2010:WorkflowViewState.IdRef="Sequence_3">
+      <Sequence.Variables>
+        <Variable x:TypeArguments="x:String" Name="UserID" />
+        <Variable x:TypeArguments="x:String" Name="Text">
+          <Variable.Default>
+            <Literal x:TypeArguments="x:String" Value="" />
+          </Variable.Default>
+        </Variable>
+      </Sequence.Variables>
+      <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+        <Assign.To>
+          <OutArgument x:TypeArguments="x:String">[UserID]</OutArgument>
+        </Assign.To>
+        <Assign.Value>
+          <InArgument x:TypeArguments="x:String">[Info("id")]</InArgument>
+        </Assign.Value>
+      </Assign>
+      <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+        <Assign.To>
+          <OutArgument x:TypeArguments="x:String">[Text]</OutArgument>
+        </Assign.To>
+        <Assign.Value>
+          <InArgument x:TypeArguments="x:String">Test Message</InArgument>
+        </Assign.Value>
+      </Assign>
+      <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke chat.postMessage workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Slack\chat.postMessage.xaml">
+        <ui:InvokeWorkflowFile.Arguments>
+          <InArgument x:TypeArguments="x:String" x:Key="Token">[in_Config("Slack_Token").ToString]</InArgument>
+          <InArgument x:TypeArguments="x:String" x:Key="Channel">[UserID]</InArgument>
+          <InArgument x:TypeArguments="x:String" x:Key="Text">[Text]</InArgument>
+          <InArgument x:TypeArguments="x:String" x:Key="Attachments" />
+          <InArgument x:TypeArguments="x:String" x:Key="Username" />
+          <InArgument x:TypeArguments="x:String" x:Key="Parse" />
+          <InArgument x:TypeArguments="x:String" x:Key="Mrkdwn" />
+          <InArgument x:TypeArguments="x:String" x:Key="UnfurlMedia" />
+          <InArgument x:TypeArguments="x:String" x:Key="UnfurlLinks" />
+          <InArgument x:TypeArguments="x:String" x:Key="ThreadTS" />
+          <InArgument x:TypeArguments="x:String" x:Key="ReplyBroadcast" />
+          <InArgument x:TypeArguments="x:String" x:Key="LinkNames" />
+          <InArgument x:TypeArguments="x:String" x:Key="IconUrl" />
+          <InArgument x:TypeArguments="x:String" x:Key="IconEmoji" />
+          <InArgument x:TypeArguments="x:String" x:Key="AsUser" />
+        </ui:InvokeWorkflowFile.Arguments>
+      </ui:InvokeWorkflowFile>
+    </Sequence>
+    <sads:DebugSymbol.Symbol>d2BDOlxVc2Vyc1xZb3NoaWhpa28gTWl5YWljaGlcRG9jdW1lbnRzXFVpUGF0aFxSZUZyYW1ld29yay1UZW1wbGF0ZS1TbGFjay1UcmFuc2FjdGlvblxQcm9jZXNzLnhhbWwVRwOEAQ4CAQFMBVUQAgEVVgWCARACAQJNB1QfAgEWWw1bPAIBA18HZhACARBnB24QAgEMbweBAR8CAQRQP1BmAgEeT0BPYwIBHFJaUmACARpRXVFmAgEYTbkBTdABAgEXZDJkPgIBE2EzYTsCARFsMmw+AgEPaTNpOQIBDXJCckoCAQpzP3NFAgEIcUBxYwIBBm+/AW/cAQIBBQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="InvokeWorkflowFile_1" sap:VirtualizedContainerService.HintSize="314,87" />
-      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="287,61" />
-      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="210,61" />
-      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="232,185">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="336,211">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="287,319" />
-      <sap2010:ViewStateData Id="WriteLine_3" sap:VirtualizedContainerService.HintSize="287,61" />
-      <sap2010:ViewStateData Id="WriteLine_4" sap:VirtualizedContainerService.HintSize="210,61" />
-      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="232,185">
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="314,60" />
+      <sap2010:ViewStateData Id="InvokeWorkflowFile_2" sap:VirtualizedContainerService.HintSize="314,87" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="336,411">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEach`1_2" sap:VirtualizedContainerService.HintSize="287,319" />
-      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="314,1004">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="336,1255">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="336,99">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="358,1590">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="358,878">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -172,7 +158,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ProcessTransaction_1" sap:VirtualizedContainerService.HintSize="398,1670" />
+      <sap2010:ViewStateData Id="ProcessTransaction_1" sap:VirtualizedContainerService.HintSize="398,958" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
