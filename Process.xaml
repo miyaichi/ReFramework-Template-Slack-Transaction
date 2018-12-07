@@ -2,6 +2,7 @@
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities"
+ xmlns:njl="clr-namespace:Newtonsoft.Json.Linq;assembly=Newtonsoft.Json"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
@@ -41,6 +42,8 @@
       <x:String>UiPath.Core</x:String>
       <x:String>UiPath.Core.Activities</x:String>
       <x:String>System.Windows.Markup</x:String>
+      <x:String>Newtonsoft.Json.Linq</x:String>
+      <x:String>Newtonsoft.Json</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -66,20 +69,20 @@
       <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
       <AssemblyReference>UiPath.Excel</AssemblyReference>
       <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>Newtonsoft.Json</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap2010:Annotation.AnnotationText="Description: In this file all other process specific files will be invoked. If an application exception occurs, the current transaction can be retried. If a BRE is thrown, the transaction will be skipped. Can be a flowchart or sequence. " DisplayName="ProcessTransaction" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence sap2010:Annotation.AnnotationText="Description: ユーザーごとの処理を行います。&#xD;&#xA;・ユーザーの情報は変数InfoにJsonオブジェクトとして格納されます。&#xD;&#xA;　取得できる情報の内容は、下記を参照ください。&#xD;&#xA;　https://api.slack.com/methods/users.info&#xD;&#xA;・ユーザーにファイルを送信する場合は、chat.postMessageではなく、file.uploadを呼び出してください。" DisplayName="ProcessTransaction" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
-      <Variable x:TypeArguments="scg:Dictionary(x:String, x:String)" Name="Profile" />
-      <Variable x:TypeArguments="scg:Dictionary(x:String, x:String)" Name="Info" />
+      <Variable x:TypeArguments="njl:JObject" Name="Info" />
     </Sequence.Variables>
     <Sequence DisplayName="Get User Info" sap2010:WorkflowViewState.IdRef="Sequence_2">
       <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke users.info workflow" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Slack\users.info.xaml">
         <ui:InvokeWorkflowFile.Arguments>
           <InArgument x:TypeArguments="x:String" x:Key="Token">[in_Config("Slack_Token").ToString]</InArgument>
           <InArgument x:TypeArguments="x:String" x:Key="User">[in_TransactionItem("UserID").ToString]</InArgument>
-          <OutArgument x:TypeArguments="scg:Dictionary(x:String, x:String)" x:Key="Profile">[Profile]</OutArgument>
-          <OutArgument x:TypeArguments="scg:Dictionary(x:String, x:String)" x:Key="Info">[Info]</OutArgument>
+          <OutArgument x:TypeArguments="njl:JObject" x:Key="Info">[Info]</OutArgument>
         </ui:InvokeWorkflowFile.Arguments>
       </ui:InvokeWorkflowFile>
     </Sequence>
@@ -97,7 +100,7 @@
           <OutArgument x:TypeArguments="x:String">[UserID]</OutArgument>
         </Assign.To>
         <Assign.Value>
-          <InArgument x:TypeArguments="x:String">[Info("id")]</InArgument>
+          <InArgument x:TypeArguments="x:String">[Info("id").ToString]</InArgument>
         </Assign.Value>
       </Assign>
       <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
@@ -128,7 +131,7 @@
         </ui:InvokeWorkflowFile.Arguments>
       </ui:InvokeWorkflowFile>
     </Sequence>
-    <sads:DebugSymbol.Symbol>d2BDOlxVc2Vyc1xZb3NoaWhpa28gTWl5YWljaGlcRG9jdW1lbnRzXFVpUGF0aFxSZUZyYW1ld29yay1UZW1wbGF0ZS1TbGFjay1UcmFuc2FjdGlvblxQcm9jZXNzLnhhbWwVRwOEAQ4CAQFMBVUQAgEVVgWCARACAQJNB1QfAgEWWw1bPAIBA18HZhACARBnB24QAgEMbweBAR8CAQRQP1BmAgEeT0BPYwIBHFJaUmACARpRXVFmAgEYTbkBTdABAgEXZDJkPgIBE2EzYTsCARFsMmw+AgEPaTNpOQIBDXJCckoCAQpzP3NFAgEIcUBxYwIBBm+/AW/cAQIBBQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d2BDOlxVc2Vyc1xZb3NoaWhpa28gTWl5YWljaGlcRG9jdW1lbnRzXFVpUGF0aFxSZUZyYW1ld29yay1UZW1wbGF0ZS1TbGFjay1UcmFuc2FjdGlvblxQcm9jZXNzLnhhbWwUTAOHAQ4CAQFQBVgQAgEUWQWFARACAQJRB1cfAgEVXg1ePAIBA2IHaRACARBqB3EQAgEMcgeEAR8CAQRUP1RmAgEbU0BTYwIBGVVDVUkCARdRuQFR0AECARZnMmdHAgETZDNkOwIBEW8ybz4CAQ9sM2w5AgENdUJ1SgIBCnY/dkUCAQh0QHRjAgEGcr8BctwBAgEF</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -150,7 +153,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="358,878">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="358,894">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -158,7 +161,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ProcessTransaction_1" sap:VirtualizedContainerService.HintSize="398,958" />
+      <sap2010:ViewStateData Id="ProcessTransaction_1" sap:VirtualizedContainerService.HintSize="398,974" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
