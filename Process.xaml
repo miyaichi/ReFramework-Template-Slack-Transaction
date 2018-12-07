@@ -70,10 +70,9 @@
       <AssemblyReference>UiPath.Excel</AssemblyReference>
       <AssemblyReference>System.ValueTuple</AssemblyReference>
       <AssemblyReference>Newtonsoft.Json</AssemblyReference>
-      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap2010:Annotation.AnnotationText="Description: ユーザーごとの処理を行います。&#xD;&#xA;・ユーザーの情報は変数InfoにJsonオブジェクトとして格納されます。&#xD;&#xA;　取得できる情報の内容は、下記を参照ください。&#xD;&#xA;　https://api.slack.com/methods/users.info&#xD;&#xA;・ユーザーにファイルを送信する場合は、chat.postMessageではなく、file.uploadを呼び出してください。" DisplayName="ProcessTransaction" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence sap2010:Annotation.AnnotationText="Description: ユーザーごとの処理を行います。&#xA;・ユーザーの情報は変数InfoにJsonオブジェクトとして格納されます。&#xA;　取得できる情報の内容は、下記を参照ください。&#xA;　https://api.slack.com/methods/users.info&#xA;・ユーザーにファイルを送信する場合は、chat.postMessageではなく、file.uploadを呼び出してください。" DisplayName="ProcessTransaction" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="njl:JObject" Name="Info" />
     </Sequence.Variables>
@@ -100,7 +99,7 @@
           <OutArgument x:TypeArguments="x:String">[UserID]</OutArgument>
         </Assign.To>
         <Assign.Value>
-          <InArgument x:TypeArguments="x:String">[Info("id").ToString]</InArgument>
+          <InArgument x:TypeArguments="x:String">[Info("user")("id").ToString]</InArgument>
         </Assign.Value>
       </Assign>
       <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
@@ -131,7 +130,7 @@
         </ui:InvokeWorkflowFile.Arguments>
       </ui:InvokeWorkflowFile>
     </Sequence>
-    <sads:DebugSymbol.Symbol>d2BDOlxVc2Vyc1xZb3NoaWhpa28gTWl5YWljaGlcRG9jdW1lbnRzXFVpUGF0aFxSZUZyYW1ld29yay1UZW1wbGF0ZS1TbGFjay1UcmFuc2FjdGlvblxQcm9jZXNzLnhhbWwUTAOHAQ4CAQFQBVgQAgEUWQWFARACAQJRB1cfAgEVXg1ePAIBA2IHaRACARBqB3EQAgEMcgeEAR8CAQRUP1RmAgEbU0BTYwIBGVVDVUkCARdRuQFR0AECARZnMmdHAgETZDNkOwIBEW8ybz4CAQ9sM2w5AgENdUJ1SgIBCnY/dkUCAQh0QHRjAgEGcr8BctwBAgEF</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d2BDOlxVc2Vyc1xZb3NoaWhpa28gTWl5YWljaGlcRG9jdW1lbnRzXFVpUGF0aFxSZUZyYW1ld29yay1UZW1wbGF0ZS1TbGFjay1UcmFuc2FjdGlvblxQcm9jZXNzLnhhbWwUSwOGAQ4CAQFPBVcQAgEUWAWEARACAQJQB1YfAgEVXQ1dPAIBA2EHaBACARBpB3AQAgEMcQeDAR8CAQRTP1NmAgEbUkBSYwIBGVRDVEkCARdQuQFQ0AECARZmMmZPAgETYzNjOwIBEW4ybj4CAQ9rM2s5AgENdEJ0SgIBCnU/dUUCAQhzQHNjAgEGcb8BcdwBAgEF</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -161,7 +160,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ProcessTransaction_1" sap:VirtualizedContainerService.HintSize="398,974" />
+      <sap2010:ViewStateData Id="ProcessTransaction_1" sap:VirtualizedContainerService.HintSize="398,1014" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
